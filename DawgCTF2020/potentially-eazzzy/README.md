@@ -1,12 +1,34 @@
 # Potentially Eazzzy
 
-We are given a python file. The purpose of this script is to verify licenses. You can view it [here](potentially-eazzy.py).
+We are given a python file. The purpose of this script is to verify licenses. You can view it [here](potentially-eazzzy.py).
 
 Upon inspection of the script, it looks like it uses the email in the license check. That makes sense. That way, no one can use the same license with two separate emails.
 
 If we want to get anywhere in this challenge, we'll have to reverse engineer the script.
 
+```python
+def main():
+    print("Welcome to Flag Generator 5000")
+    print()
+    print("Improving the speed quality of CTF solves since 2020")
+    print()
+    print("You'll need to have your email address and registration key ready.")
+    print("Please note the support hotline is closed for COVID-19 and will be")
+    print("unavailable until further notice.")
+    print()
+
+    email = input("Please enter your email address: ")
+    key = input("Please enter your key: ")
+```
+
 First off, it greets the user. Then, it asks the user for the email and flag and stores those inputs as strings.
+
+```python
+if validate(email, key):
+    print_flag()
+else:
+    print("License not valid. Please contact support.")
+```
 
 It then validates the license by calling `validate(email, key)`, and then prints the flag if the function returns `True`. So far so good.
 
@@ -70,7 +92,9 @@ if dotcount < 0 or dotcount >= len(ALPHABET):
     return False
 ```
 
-The email has to have between 1 and 80 periods. (don't ask me why) I implemented all this in a [script I wrote](sol.py) to generate a license for me, so I'm not doing it by hand or anything like that. More on that later.
+The email has to have between 0 and 80 periods. (don't ask me why, as the email is already only 32 characters)
+
+I implemented all this in a [script I wrote](sol.py) to generate a license for me, so I'm not doing it by hand or anything like that. More on that later.
 
 Then comes the crazy checks. I swear, whoever wrote this used a script to write this part:
 
@@ -237,7 +261,7 @@ if o(key[5]) != a(o(key[3]) + 52):
     return False
 ```
 
-`key[4]` depends on `key[5]`, and `key[5]` depends on `key[3]`. We already have `key[3]`, so we can go ahead and get `key[5]`. Then we can get `key[4]`.
+`key[4]` depends on `key[5]`, and `key[5]` depends on `key[3]`. We already have `key[3]`, so we can go ahead and get `key[5]`. Then we can get `key[4]`
 
 ```python
 key[5] = a(key[3] + 52) ## the order of key calculation matters, because the value of key[4] depends on key[5].
@@ -245,7 +269,7 @@ key[5] = a(key[3] + 52) ## the order of key calculation matters, because the val
 key[4] = a(sum(o(i) for i in email)%60 + key[5])
 ```
 
-It keeps going like that, until `key[10]`.
+It keeps going like that, until `key[10]`
 
 ```python
 key[7] = a(key[1] + key[2] - key[3])
@@ -259,7 +283,7 @@ key[9] = a(key[6] + key[4] + key[8] - 4)
 key[10] = a((key[1])%2 * 8 + key[2] % 3 + key[3] % 4)
 ```
 
-Then it starts getting more complex. We are introduced to a new function `m()`.
+Then it starts getting more complex. We are introduced to a new function `m()`
 
 ```python
 def m(one, two, three, four):
@@ -290,7 +314,7 @@ if not m(email[3], key[11], key[12], 8):
     return False
 ```
 
-In order for this check to pass, the function being called, `m()`, has to return `True`.
+In order for this check to pass, the function being called, `m()`, has to return `True`
 
 After some trial and error, I got this:
 
@@ -307,7 +331,7 @@ def l(two, three, four):
 
 I was able to create a function that basically gets `one` when given `two`, `three`, and `four`.
 
-In other words, assuming you have `two`, `three`, and `four`, `m(l(two, three, four), two, three, four)` will __always__ return `True`.
+In other words, assuming you have `two`, `three`, and `four`, `m(l(two, three, four), two, three, four)` will __always__ return `True`
 
 Also, remember that all characters have to be in the ASCII range `0x2a-0x7a`, so I add 40 to each character until it is.
 
@@ -345,9 +369,9 @@ for i in oldEmail:
     email.append(ord(i))
 ```
 
-Now `email` is a list of characters, which is what we want.
+Now `email` is a list of character ASCII values, which is what we want.
 
-Now we have `key[4]` and `email[7]`. Now we can get `key[13]`.
+Since we have `key[4]` and `email[7]`now, we can get `key[13]`!
 
 ```python
 key[13] = l(email[7], key[4], 18)
@@ -454,7 +478,7 @@ After we're finished, it should look something like this:
     key[18] = l(email[13], key[7], oldEmail.count('a'))
 
 #    if not m(email[30], key[30], email[18], 4):
-#        return False
+#        return False1
 
     key[30] = l(email[30], email[18], 4)
 
@@ -527,12 +551,12 @@ And if you're interested, here's what main looks like:
 
 ```python
 def main():
-    email = input("What email do you want to use? ").decode('utf-8')
+    email = input("What email do you want to use? ")
 
-    print(validate(email))
+    print(getLicense(email))
 ```
 
-And we're done! That's it!
+And we're done! That's it! All you have to do is connect to the server using netcat and get the flag!
 
 Unfortunately, I wasn't able to get the flag. I finished it an hour after the CTF was over, but it still was a really fun challenge!
 

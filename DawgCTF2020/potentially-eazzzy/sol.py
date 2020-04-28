@@ -73,7 +73,7 @@ def getLicense(email):
     key[0] = ord('Z') ## first character of key has to be a z
 
     dotcount = email.count(".")
-    if dotcount < 0 or dotcount >= len(ALPHABET): ## there has to be between 1 and 80 periods in the email
+    if dotcount < 0 or dotcount >= len(ALPHABET): ## there has to be between 0 and 80 periods in the email
         return "???"
 
     key[1] = a(dotcount)

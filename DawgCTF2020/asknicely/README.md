@@ -65,26 +65,7 @@ While inspecting the assembly file, I found this function:
 Looks like this function is responsible for printing the flag. I could just manually convert each ASCII character by hand, or I could just use gdb.
 
 ```
-jordan@notyourcomputer:~/CTF-writeups/DawgCTF2020/asknicely$ gdb asknicely
-GNU gdb (Debian 8.2.1-2+b3) 8.2.1
-Copyright (C) 2018 Free Software Foundation, Inc.
-License GPLv3+: GNU GPL version 3 or later <http://gnu.org/licenses/gpl.html>
-This is free software: you are free to change and redistribute it.
-There is NO WARRANTY, to the extent permitted by law.
-Type "show copying" and "show warranty" for details.
-This GDB was configured as "x86_64-linux-gnu".
-Type "show configuration" for configuration details.
-For bug reporting instructions, please see:
-<http://www.gnu.org/software/gdb/bugs/>.
-Find the GDB manual and other documentation resources online at:
-    <http://www.gnu.org/software/gdb/documentation/>.
-
-For help, type "help".
-Type "apropos word" to search for commands related to "word"...
-/home/jordan/.gdbinit:1: Error in sourced command file:
-:8: Error in sourced command file:
-Undefined command: "from".  Try "help".
-Reading symbols from asknicely...(no debugging symbols found)...done.
+$ gdb asknicely
 (gdb) b *main
 Breakpoint 1 at 0x122a
 (gdb) r

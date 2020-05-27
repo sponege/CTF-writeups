@@ -1,0 +1,1 @@
+raise ValueError(open('flag.txt','r').read(100))

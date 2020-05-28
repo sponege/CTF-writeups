@@ -24,7 +24,7 @@ This probably means we can execute PHP code. I tested it with pastebin, and it w
 
 After a little searching on the web, I found [this PHP reverse shell](http://pentestmonkey.net/tools/web-shells/php-reverse-shell) from pentestmonkey. I edited the IP and port to match my own, and uploaded it to pastebin. I then went to the pastebin URL with the [file viewer](https://file_viewer.tjctf.org/).
 
-And, surprise surprise, the reverse shell worked, and I had access to the machine! After some digging, I found out that all the HTML files were in `/var/www`, and you know the rest.
+And, surprise surprise, the reverse shell worked, and I had access to the machine! After some digging, I found out that all the HTML files were in `/var/www/html`, and you know the rest.
 
 ![](reverse-shell.png)
 

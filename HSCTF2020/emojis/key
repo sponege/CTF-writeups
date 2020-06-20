@@ -1,0 +1,10 @@
+😊 - replace first operand with second operand
+😇 - add second operand to first
+😈 - subtract second operand to first
+😵 - if both operands are equal, skip next instruction
+🎤 - second operand to instruction, store ascii character input to first operand
+📢 - first operand to instruction, echo ascii character of second operand
+
+--Constants--
+0  1  2  4  8
+💔 💜 💕 💞 💖
